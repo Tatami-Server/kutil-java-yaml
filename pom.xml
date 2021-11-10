@@ -6,18 +6,24 @@
 
     <groupId>net.kigawa</groupId>
     <artifactId>YamlUtil</artifactId>
-    <version>1.0a</version>
+    <version>1.0dev</version>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
     </properties>
+    <repositories>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+    </repositories>
 
     <dependencies>
         <dependency>
-            <groupId>net.kigawa</groupId>
+            <groupId>com.github.kigawa8390</groupId>
             <artifactId>Util</artifactId>
-            <version>1.0a</version>
+            <version>1.0dev</version>
         </dependency>
         <dependency>
             <groupId>org.yaml</groupId>
