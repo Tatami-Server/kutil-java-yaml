@@ -11,9 +11,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Yaml {
-    Logger logger;
-    org.yaml.snakeyaml.Yaml yaml;
-    File dir;
+    private final Logger logger;
+    private final org.yaml.snakeyaml.Yaml yaml;
+    private final File dir;
 
     public Yaml() {
         this(Paths.get("").toAbsolutePath().toFile());
@@ -22,7 +22,7 @@ public class Yaml {
     public Yaml(File dir) {
         this(dir, null, new Logger() {
             @Override
-            public void logger(String message) {
+            public void logger(Object message) {
                 System.out.println(message);
             }
         });
@@ -35,7 +35,7 @@ public class Yaml {
     public Yaml(CustomClassLoaderConstructor constructor) {
         this(constructor, new Logger() {
             @Override
-            public void logger(String message) {
+            public void logger(Object message) {
                 System.out.println(message);
             }
         });
@@ -48,7 +48,7 @@ public class Yaml {
     public Yaml(File dir, CustomClassLoaderConstructor constructor) {
         this(dir, constructor, new Logger() {
             @Override
-            public void logger(String message) {
+            public void logger(Object message) {
             }
         });
     }
