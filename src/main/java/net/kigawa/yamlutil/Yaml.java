@@ -1,6 +1,8 @@
 package net.kigawa.yamlutil;
 
 
+import net.kigawa.util.InterfaceLogger;
+import net.kigawa.util.LogSender;
 import net.kigawa.util.Logger;
 import org.yaml.snakeyaml.constructor.CustomClassLoaderConstructor;
 
@@ -10,8 +12,8 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Yaml {
-    private final Logger logger;
+public class Yaml extends LogSender {
+    private final InterfaceLogger logger;
     private final org.yaml.snakeyaml.Yaml yaml;
     private final File dir;
 
@@ -20,12 +22,7 @@ public class Yaml {
     }
 
     public Yaml(File dir) {
-        this(dir, null, new Logger() {
-            @Override
-            public void logger(Object message) {
-                System.out.println(message);
-            }
-        });
+        this(dir, null, new Logger(false, false));
     }
 
     public Yaml(File dir, Logger logger) {
@@ -33,12 +30,7 @@ public class Yaml {
     }
 
     public Yaml(CustomClassLoaderConstructor constructor) {
-        this(constructor, new Logger() {
-            @Override
-            public void logger(Object message) {
-                System.out.println(message);
-            }
-        });
+        this(constructor, new Logger(false, false));
     }
 
     public Yaml(CustomClassLoaderConstructor constructor, Logger logger) {
@@ -46,14 +38,11 @@ public class Yaml {
     }
 
     public Yaml(File dir, CustomClassLoaderConstructor constructor) {
-        this(dir, constructor, new Logger() {
-            @Override
-            public void logger(Object message) {
-            }
-        });
+        this(dir, constructor, new Logger(false, false));
     }
 
     public Yaml(File dir, CustomClassLoaderConstructor constructor, Logger logger) {
+        super(logger);
         if (constructor == null) {
             yaml = new org.yaml.snakeyaml.Yaml();
         } else {
@@ -65,17 +54,18 @@ public class Yaml {
     }
 
     public void save(YamlData data, File file) {
+        info("save file " + file.getName());
         try {
             if (!file.exists()) {
-                file.createNewFile();
+                if (file.createNewFile()) throw new FileNotFoundException();
             }
             FileWriter fileWriter = new FileWriter(file);
             String dump = yaml.dump(data);
-            logger.logger(dump);
+            debug(dump);
             fileWriter.write(dump);
             fileWriter.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            waring(e);
         }
     }
 
@@ -90,6 +80,7 @@ public class Yaml {
     }
 
     public <T> T load(Class<T> type, File file) {
+        info("load file " + file.getName());
         T data = null;
         //check file exists
         if (file.exists()) {
@@ -102,7 +93,7 @@ public class Yaml {
                 FileReader reader = new FileReader(file);
                 data = yaml.loadAs(reader, type);
             } catch (FileNotFoundException e) {
-                e.printStackTrace();
+                waring(e);
             }
         }
         return data;
@@ -113,19 +104,25 @@ public class Yaml {
     }
 
     public <T> List<T> loadAll(Class<T> type, File dir) {
+        info("load files in " + dir.getName());
         List<T> yamlData = new ArrayList<>();
-        //make dir
-        dir.mkdir();
-        //get files name
-        String[] files = dir.list();
-        //load and add data
-        assert files != null;
-        for (String s : files) {
-            File file = new File(dir, s);
-            T data = load(type, file);
-            yamlData.add(data);
+        try {
+            //make dir
+            if (!dir.exists()) {
+                if (dir.mkdirs()) throw new IOException();
+            }
+            //get files name
+            String[] files = dir.list();
+            //load and add data
+            assert files != null;
+            for (String s : files) {
+                File file = new File(dir, s);
+                T data = load(type, file);
+                yamlData.add(data);
+            }
+        } catch (IOException e) {
+            waring(e);
         }
-
 
         return yamlData;
     }

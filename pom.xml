@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>net.kigawa</groupId>
-    <artifactId>YamlUtil</artifactId>
+    <artifactId>yaml-util</artifactId>
     <version>2.0dev</version>
 
     <properties>
@@ -22,8 +22,8 @@
     <dependencies>
         <dependency>
             <groupId>com.github.kigawa8390</groupId>
-            <artifactId>util</artifactId>
-            <version>2.0b</version>
+            <artifactId>Util</artifactId>
+            <version>3bea310b</version>
         </dependency>
         <dependency>
             <groupId>org.yaml</groupId>
