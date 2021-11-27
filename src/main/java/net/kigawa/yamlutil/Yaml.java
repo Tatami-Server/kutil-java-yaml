@@ -65,7 +65,7 @@ public class Yaml extends LogSender {
             fileWriter.write(dump);
             fileWriter.close();
         } catch (IOException e) {
-            waring(e);
+            warning(e);
         }
     }
 
@@ -93,7 +93,7 @@ public class Yaml extends LogSender {
                 FileReader reader = new FileReader(file);
                 data = yaml.loadAs(reader, type);
             } catch (FileNotFoundException e) {
-                waring(e);
+                warning(e);
             }
         }
         return data;
@@ -121,7 +121,7 @@ public class Yaml extends LogSender {
                 yamlData.add(data);
             }
         } catch (IOException e) {
-            waring(e);
+            warning(e);
         }
 
         return yamlData;
