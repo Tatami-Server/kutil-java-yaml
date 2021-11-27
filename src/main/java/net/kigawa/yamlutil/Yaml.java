@@ -25,7 +25,7 @@ public class Yaml extends LogSender {
         this(dir, null, new Logger(false, false));
     }
 
-    public Yaml(File dir, Logger logger) {
+    public Yaml(File dir, InterfaceLogger logger) {
         this(dir, null, logger);
     }
 
@@ -33,7 +33,7 @@ public class Yaml extends LogSender {
         this(constructor, new Logger(false, false));
     }
 
-    public Yaml(CustomClassLoaderConstructor constructor, Logger logger) {
+    public Yaml(CustomClassLoaderConstructor constructor, InterfaceLogger logger) {
         this(Paths.get("").toAbsolutePath().toFile(), constructor, logger);
     }
 
@@ -41,7 +41,7 @@ public class Yaml extends LogSender {
         this(dir, constructor, new Logger(false, false));
     }
 
-    public Yaml(File dir, CustomClassLoaderConstructor constructor, Logger logger) {
+    public Yaml(File dir, CustomClassLoaderConstructor constructor, InterfaceLogger logger) {
         super(logger);
         if (constructor == null) {
             yaml = new org.yaml.snakeyaml.Yaml();
