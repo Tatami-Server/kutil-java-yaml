@@ -23,7 +23,7 @@
         <dependency>
             <groupId>com.github.kigawa8390</groupId>
             <artifactId>Util</artifactId>
-            <version>07a20e03</version>
+            <version>34170bdf</version>
         </dependency>
         <dependency>
             <groupId>org.yaml</groupId>

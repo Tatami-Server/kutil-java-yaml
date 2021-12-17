@@ -1,9 +1,7 @@
 package net.kigawa.yamlutil;
 
 
-import net.kigawa.util.InterfaceLogger;
 import net.kigawa.util.LogSender;
-import net.kigawa.util.Logger;
 import org.yaml.snakeyaml.constructor.CustomClassLoaderConstructor;
 
 import java.io.*;
@@ -13,7 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Yaml extends LogSender {
-    private final InterfaceLogger logger;
     private final org.yaml.snakeyaml.Yaml yaml;
     private final File dir;
 
@@ -22,27 +19,14 @@ public class Yaml extends LogSender {
     }
 
     public Yaml(File dir) {
-        this(dir, null, new Logger(false, false));
-    }
-
-    public Yaml(File dir, InterfaceLogger logger) {
-        this(dir, null, logger);
+        this(dir, null);
     }
 
     public Yaml(CustomClassLoaderConstructor constructor) {
-        this(constructor, new Logger(false, false));
-    }
-
-    public Yaml(CustomClassLoaderConstructor constructor, InterfaceLogger logger) {
-        this(Paths.get("").toAbsolutePath().toFile(), constructor, logger);
+        this(Paths.get("").toAbsolutePath().toFile(), constructor);
     }
 
     public Yaml(File dir, CustomClassLoaderConstructor constructor) {
-        this(dir, constructor, new Logger(false, false));
-    }
-
-    public Yaml(File dir, CustomClassLoaderConstructor constructor, InterfaceLogger logger) {
-        super(logger);
         if (constructor == null) {
             yaml = new org.yaml.snakeyaml.Yaml();
         } else {
@@ -50,7 +34,6 @@ public class Yaml extends LogSender {
         }
         if (!dir.exists()) dir.mkdirs();
         this.dir = dir;
-        this.logger = logger;
     }
 
     public void save(YamlData data, File file) {
@@ -61,7 +44,7 @@ public class Yaml extends LogSender {
             }
             FileWriter fileWriter = new FileWriter(file);
             String dump = yaml.dump(data);
-            debug(dump);
+            fine(dump);
             fileWriter.write(dump);
             fileWriter.close();
         } catch (IOException e) {
