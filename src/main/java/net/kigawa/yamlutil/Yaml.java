@@ -39,9 +39,9 @@ public class Yaml extends LogSender {
     public void save(YamlData data, File file) {
         info("save file " + file.getName());
         try {
-            if (!file.exists()) {
+
                 if (file.createNewFile()) throw new FileNotFoundException();
-            }
+
             FileWriter fileWriter = new FileWriter(file);
             String dump = yaml.dump(data);
             fine(dump);
