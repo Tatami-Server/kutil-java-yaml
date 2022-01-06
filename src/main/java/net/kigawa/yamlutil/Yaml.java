@@ -1,7 +1,7 @@
 package net.kigawa.yamlutil;
 
 
-import net.kigawa.util.LogSender;
+import net.kigawa.log.LogSender;
 import org.yaml.snakeyaml.constructor.CustomClassLoaderConstructor;
 
 import java.io.*;
@@ -10,7 +10,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Yaml extends LogSender {
+public class Yaml implements LogSender {
     private final org.yaml.snakeyaml.Yaml yaml;
     private final File dir;
 
