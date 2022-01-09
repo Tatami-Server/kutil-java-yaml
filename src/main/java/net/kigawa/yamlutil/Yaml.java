@@ -32,16 +32,14 @@ public class Yaml implements LogSender {
         } else {
             yaml = new org.yaml.snakeyaml.Yaml(constructor);
         }
-        if (!dir.exists()) dir.mkdirs();
+        dir.mkdirs();
         this.dir = dir;
     }
 
     public void save(YamlData data, File file) {
         info("save file " + file.getName());
         try {
-
-                if (file.createNewFile()) throw new FileNotFoundException();
-
+            file.createNewFile();
             FileWriter fileWriter = new FileWriter(file);
             String dump = yaml.dump(data);
             fine(dump);
@@ -89,22 +87,17 @@ public class Yaml implements LogSender {
     public <T> List<T> loadAll(Class<T> type, File dir) {
         info("load files in " + dir.getName());
         List<T> yamlData = new ArrayList<>();
-        try {
-            //make dir
-            if (!dir.exists()) {
-                if (dir.mkdirs()) throw new IOException();
-            }
-            //get files name
-            String[] files = dir.list();
-            //load and add data
-            assert files != null;
-            for (String s : files) {
-                File file = new File(dir, s);
-                T data = load(type, file);
-                yamlData.add(data);
-            }
-        } catch (IOException e) {
-            warning(e);
+
+        //make dir
+        dir.mkdirs();
+        //get files name
+        String[] files = dir.list();
+        //load and add data
+        assert files != null;
+        for (String s : files) {
+            File file = new File(dir, s);
+            T data = load(type, file);
+            yamlData.add(data);
         }
 
         return yamlData;
