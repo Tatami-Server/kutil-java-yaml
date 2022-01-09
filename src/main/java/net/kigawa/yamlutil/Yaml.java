@@ -85,7 +85,7 @@ public class Yaml implements LogSender {
     }
 
     public <T> List<T> loadAll(Class<T> type, File dir) {
-        info("load files in " + dir.getName());
+        info("loading files in " + dir.getName());
         List<T> yamlData = new ArrayList<>();
 
         //make dir
