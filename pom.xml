@@ -6,7 +6,7 @@
 
     <groupId>net.kigawa</groupId>
     <artifactId>yaml-util</artifactId>
-    <version>3.16dev</version>
+    <version>3.17dev</version>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
@@ -23,7 +23,7 @@
         <dependency>
             <groupId>net.kigawa</groupId>
             <artifactId>util</artifactId>
-            <version>3.14dev</version>
+            <version>3.15dev</version>
         </dependency>
         <dependency>
             <groupId>org.yaml</groupId>
