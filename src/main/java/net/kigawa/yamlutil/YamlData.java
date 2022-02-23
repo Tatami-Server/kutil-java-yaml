@@ -1,6 +1,6 @@
 package net.kigawa.yamlutil;
 
-import net.kigawa.util.Named;
+import net.kigawa.interfaces.Named;
 
 public abstract class YamlData implements Named {
     String name;

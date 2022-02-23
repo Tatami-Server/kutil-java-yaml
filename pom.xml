@@ -5,19 +5,25 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>net.kigawa</groupId>
-    <artifactId>YamlUtil</artifactId>
-    <version>1.0a</version>
+    <artifactId>yaml-util</artifactId>
+    <version>3.17dev</version>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
     </properties>
+    <repositories>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+    </repositories>
 
     <dependencies>
         <dependency>
             <groupId>net.kigawa</groupId>
-            <artifactId>Util</artifactId>
-            <version>1.0a</version>
+            <artifactId>util</artifactId>
+            <version>3.15dev</version>
         </dependency>
         <dependency>
             <groupId>org.yaml</groupId>

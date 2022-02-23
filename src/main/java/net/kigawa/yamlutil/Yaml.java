@@ -1,7 +1,7 @@
 package net.kigawa.yamlutil;
 
 
-import net.kigawa.util.Logger;
+import net.kigawa.log.LogSender;
 import org.yaml.snakeyaml.constructor.CustomClassLoaderConstructor;
 
 import java.io.*;
@@ -10,72 +10,43 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Yaml {
-    Logger logger;
-    org.yaml.snakeyaml.Yaml yaml;
-    File dir;
+public class Yaml implements LogSender {
+    private final org.yaml.snakeyaml.Yaml yaml;
+    private final File dir;
 
     public Yaml() {
         this(Paths.get("").toAbsolutePath().toFile());
     }
 
     public Yaml(File dir) {
-        this(dir, null, new Logger() {
-            @Override
-            public void logger(String message) {
-                System.out.println(message);
-            }
-        });
-    }
-
-    public Yaml(File dir, Logger logger) {
-        this(dir, null, logger);
+        this(dir, null);
     }
 
     public Yaml(CustomClassLoaderConstructor constructor) {
-        this(constructor, new Logger() {
-            @Override
-            public void logger(String message) {
-                System.out.println(message);
-            }
-        });
-    }
-
-    public Yaml(CustomClassLoaderConstructor constructor, Logger logger) {
-        this(Paths.get("").toAbsolutePath().toFile(), constructor, logger);
+        this(Paths.get("").toAbsolutePath().toFile(), constructor);
     }
 
     public Yaml(File dir, CustomClassLoaderConstructor constructor) {
-        this(dir, constructor, new Logger() {
-            @Override
-            public void logger(String message) {
-            }
-        });
-    }
-
-    public Yaml(File dir, CustomClassLoaderConstructor constructor, Logger logger) {
         if (constructor == null) {
             yaml = new org.yaml.snakeyaml.Yaml();
         } else {
             yaml = new org.yaml.snakeyaml.Yaml(constructor);
         }
-        if (!dir.exists()) dir.mkdirs();
+        dir.mkdirs();
         this.dir = dir;
-        this.logger = logger;
     }
 
     public void save(YamlData data, File file) {
+        info("save file " + file.getName());
         try {
-            if (!file.exists()) {
-                file.createNewFile();
-            }
+            file.createNewFile();
             FileWriter fileWriter = new FileWriter(file);
             String dump = yaml.dump(data);
-            logger.logger(dump);
+            fine(dump);
             fileWriter.write(dump);
             fileWriter.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            warning(e);
         }
     }
 
@@ -90,6 +61,7 @@ public class Yaml {
     }
 
     public <T> T load(Class<T> type, File file) {
+        info("load file " + file.getName());
         T data = null;
         //check file exists
         if (file.exists()) {
@@ -102,7 +74,7 @@ public class Yaml {
                 FileReader reader = new FileReader(file);
                 data = yaml.loadAs(reader, type);
             } catch (FileNotFoundException e) {
-                e.printStackTrace();
+                warning(e);
             }
         }
         return data;
@@ -113,9 +85,11 @@ public class Yaml {
     }
 
     public <T> List<T> loadAll(Class<T> type, File dir) {
+        info("loading files in " + dir.getName());
         List<T> yamlData = new ArrayList<>();
+
         //make dir
-        dir.mkdir();
+        dir.mkdirs();
         //get files name
         String[] files = dir.list();
         //load and add data
@@ -125,7 +99,6 @@ public class Yaml {
             T data = load(type, file);
             yamlData.add(data);
         }
-
 
         return yamlData;
     }
