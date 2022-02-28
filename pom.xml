@@ -6,7 +6,7 @@
 
     <groupId>net.kigawa.kutil</groupId>
     <artifactId>yaml</artifactId>
-    <version>4.0dev</version>
+    <version>1.0dev</version>
 
     <properties>
         <maven.compiler.source>11</maven.compiler.source>
