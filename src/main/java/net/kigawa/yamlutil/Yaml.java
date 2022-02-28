@@ -1,7 +1,7 @@
 package net.kigawa.yamlutil;
 
 
-import net.kigawa.log.LogSender;
+import net.kigawa.kutil.kutil.interfaces.LoggerInterface;
 import org.yaml.snakeyaml.constructor.CustomClassLoaderConstructor;
 
 import java.io.*;
@@ -10,23 +10,21 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Yaml implements LogSender {
+public class Yaml {
     private final org.yaml.snakeyaml.Yaml yaml;
     private final File dir;
+    private final LoggerInterface logger;
 
-    public Yaml() {
-        this(Paths.get("").toAbsolutePath().toFile());
+    public Yaml(LoggerInterface logger) {
+        this(Paths.get("").toAbsolutePath().toFile(), logger);
     }
 
-    public Yaml(File dir) {
-        this(dir, null);
+    public Yaml(File dir, LoggerInterface logger) {
+        this(dir, null, logger);
     }
 
-    public Yaml(CustomClassLoaderConstructor constructor) {
-        this(Paths.get("").toAbsolutePath().toFile(), constructor);
-    }
-
-    public Yaml(File dir, CustomClassLoaderConstructor constructor) {
+    public Yaml(File dir, CustomClassLoaderConstructor constructor, LoggerInterface logger) {
+        this.logger = logger;
         if (constructor == null) {
             yaml = new org.yaml.snakeyaml.Yaml();
         } else {
@@ -36,23 +34,8 @@ public class Yaml implements LogSender {
         this.dir = dir;
     }
 
-    public void save(YamlData data, File file) {
-        info("save file " + file.getName());
-        try {
-            file.createNewFile();
-            FileWriter fileWriter = new FileWriter(file);
-            String dump = yaml.dump(data);
-            fine(dump);
-            fileWriter.write(dump);
-            fileWriter.close();
-        } catch (IOException e) {
-            warning(e);
-        }
-    }
-
-    public void save(YamlData data) {
-        File file = new File(dir, data.getName() + ".yml");
-        save(data, file);
+    public Yaml(CustomClassLoaderConstructor constructor, LoggerInterface logger) {
+        this(Paths.get("").toAbsolutePath().toFile(), constructor, logger);
     }
 
     public <T> T load(Class<T> type, String name) {
@@ -61,7 +44,7 @@ public class Yaml implements LogSender {
     }
 
     public <T> T load(Class<T> type, File file) {
-        info("load file " + file.getName());
+        logger.info("load file " + file.getName());
         T data = null;
         //check file exists
         if (file.exists()) {
@@ -74,7 +57,7 @@ public class Yaml implements LogSender {
                 FileReader reader = new FileReader(file);
                 data = yaml.loadAs(reader, type);
             } catch (FileNotFoundException e) {
-                warning(e);
+                logger.warning(e);
             }
         }
         return data;
@@ -85,7 +68,7 @@ public class Yaml implements LogSender {
     }
 
     public <T> List<T> loadAll(Class<T> type, File dir) {
-        info("loading files in " + dir.getName());
+        logger.info("loading files in " + dir.getName());
         List<T> yamlData = new ArrayList<>();
 
         //make dir
@@ -101,6 +84,25 @@ public class Yaml implements LogSender {
         }
 
         return yamlData;
+    }
+
+    public void save(YamlData data) {
+        File file = new File(dir, data.getName() + ".yml");
+        save(data, file);
+    }
+
+    public void save(YamlData data, File file) {
+        logger.info("save file " + file.getName());
+        try {
+            file.createNewFile();
+            FileWriter fileWriter = new FileWriter(file);
+            String dump = yaml.dump(data);
+            logger.fine(dump);
+            fileWriter.write(dump);
+            fileWriter.close();
+        } catch (IOException e) {
+            logger.warning(e);
+        }
     }
 
 }
