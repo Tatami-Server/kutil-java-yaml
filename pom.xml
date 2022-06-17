@@ -17,12 +17,12 @@
         <dependency>
             <groupId>net.kigawa.kutil</groupId>
             <artifactId>kutil</artifactId>
-            <version>1.1dev</version>
+            <version>2.1</version>
         </dependency>
         <dependency>
             <groupId>org.yaml</groupId>
             <artifactId>snakeyaml</artifactId>
-            <version>1.29</version>
+            <version>1.30</version>
         </dependency>
     </dependencies>
 
